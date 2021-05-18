@@ -65,7 +65,7 @@ public class UserController {
                 user.setEnable(1);
                 user.setRoleId(2);*/
                 userRepository.save(user);
-                return "redirect:/";
+                return "redirect:/juegos/vista";
             } catch (DataIntegrityViolationException ex) {
                 bindingResult.rejectValue("username", "typeMismatch"); // pass an error message to the view
                 return "user/signUp";

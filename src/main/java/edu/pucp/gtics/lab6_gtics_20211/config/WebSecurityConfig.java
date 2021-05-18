@@ -21,7 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/user/signIn")
                 .loginProcessingUrl("/processLogin")
-                .defaultSuccessUrl("/user/signInRedirect", true);
+                .usernameParameter("correo")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/user/signInRedirect",true);
 
         http.logout()
                 .logoutSuccessUrl("/")
