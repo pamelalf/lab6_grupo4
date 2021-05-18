@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<div th:fragment="header(active)">
+<div th:fragment="header(option)">
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;" >
 
         <a class="navbar-brand" >
@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse justify-content-star" id="navbar-app"  sec:authorize="isAuthenticated()">
             <ul class="navbar-nav" >
                 <li  sec:authorize="hasAnyAuthority('USER')" class="nav-item active" >
-                    <a class="nav-link" th:href="@{/juegos/}" th:classappend="${option == 'Juegos'?'active':''}"
+                    <a class="nav-link" th:href="@{/juegos/lista}" th:classappend="${option == 'Juegos'?'active':''}"
                     >Juegos</a>
                 </li>
                 <li  sec:authorize="hasAnyAuthority('ADMIN')" class="nav-item active" >
@@ -26,7 +26,7 @@
                     >Juegos</a>
                 </li>
                 <li   sec:authorize="hasAnyAuthority('ADMIN')" class="nav-item" >
-                    <a class="nav-link" th:href="@{/plataformas}" th:classappend="${option == 'Plataformas'?'active':''}">Plataformas</a>
+                    <a class="nav-link" th:href="@{/plataformas/lista}" th:classappend="${option == 'Plataformas'?'active':''}">Plataformas</a>
                 </li>
             </ul>
         </div>
@@ -43,7 +43,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                        sec:authorize="isAuthenticated()">
-                        <i class="fa fa-user"></i><span th:text="| ${session.usuario.nombres} ${session.usuario.apellidos}|"> </span>
+                        <i class="fa fa-user"></i><span th:if="${session.user.apellidos == null}" th:text=" ${session.user.nombres}"/>
+                        <span th:if="${session.user.apellidos != null}" th:text="| ${session.user.nombres} ${session.user.apellidos}|"> </span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <div class="dropdown-divider"></div>

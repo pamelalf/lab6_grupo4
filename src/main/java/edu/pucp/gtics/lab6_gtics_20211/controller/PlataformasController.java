@@ -39,6 +39,8 @@ public class PlataformasController {
         if (opt.isPresent()){
             Plataformas plataforma = opt.get();
             model.addAttribute("plataforma", plataforma);
+
+
             return "plataformas/editarFrm";
         }else {
             return "redirect:/plataformas/lista";

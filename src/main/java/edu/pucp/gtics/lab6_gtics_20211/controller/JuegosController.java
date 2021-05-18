@@ -9,10 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +57,7 @@ public class JuegosController {
             return "juegos/comprado";
         } else {
             model.addAttribute("listajuegos", listajuegos);
-            return "juegos/vista";
+            return "/vista";
         }
     }
 
@@ -77,13 +80,13 @@ public class JuegosController {
     }
 
     @GetMapping("/juegos/editar")
-    public String editarJuegos(@RequestParam("id") int id, Model model){
+    public String editarJuegos(@ModelAttribute("juego") Juegos juego,@RequestParam("id") int id, Model model){
         Optional<Juegos> opt = juegosRepository.findById(id);
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
         List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
         List<Generos> listaGeneros = generosRepository.findAll();
         if (opt.isPresent()){
-            Juegos juego = opt.get();
+            juego = opt.get();
             model.addAttribute("juego", juego);
             model.addAttribute("listaPlataformas", listaPlataformas);
             model.addAttribute("listaDistribuidoras", listaDistribuidoras);
@@ -96,6 +99,8 @@ public class JuegosController {
 
     @PostMapping("/juegos/guardar")
     public String guardarJuegos(Model model, RedirectAttributes attr, @ModelAttribute("juego") @Valid Juegos juego, BindingResult bindingResult ){
+        System.out.println(juego.getIdjuego());
+
         if(bindingResult.hasErrors()){
             List<Plataformas> listaPlataformas = plataformasRepository.findAll();
             List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
@@ -115,7 +120,6 @@ public class JuegosController {
             return "redirect:/juegos/lista";
         }
 
-
     }
 
     @GetMapping("/juegos/borrar")
@@ -126,5 +130,29 @@ public class JuegosController {
         }
         return "redirect:/juegos/lista";
     }
+
+
+    @InitBinder("juego")
+    public void validator(WebDataBinder binder){
+        PropertyEditorSupport valDouble = new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    this.setValue(new Double(text));
+                } catch (NumberFormatException e) {
+                    this.setValue(0);
+                }
+            }
+        };
+
+
+
+
+        binder.registerCustomEditor(Double.class,"precio",valDouble);
+
+
+
+    }
+
 
 }

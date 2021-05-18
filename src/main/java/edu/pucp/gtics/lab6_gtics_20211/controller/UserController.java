@@ -1,6 +1,7 @@
 package edu.pucp.gtics.lab6_gtics_20211.controller;
 
 import edu.pucp.gtics.lab6_gtics_20211.entity.User;
+import edu.pucp.gtics.lab6_gtics_20211.repository.JuegosRepository;
 import edu.pucp.gtics.lab6_gtics_20211.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,16 +26,23 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    JuegosRepository juegosRepository;
 
     @GetMapping(value = {"/user/signIn"})
     public String signIn(){
         return "user/signIn";
     }
 
+
     @GetMapping("/user/signInRedirect")
     public String signInRedirect(Authentication auth, HttpSession session){
+        String rol1= auth.getName();
+        System.out.println(rol1);
         User user = userRepository.findByCorreo(auth.getName());
         session.setAttribute("user", user);
+        System.out.println(user.getAutorizacion());
+        System.out.println(user.getCorreo());
 
         String rol ="";
         for (GrantedAuthority role : auth.getAuthorities()) {
@@ -61,11 +70,11 @@ public class UserController {
             try {
                 attr.addFlashAttribute("msg","Usuario Registrado Exitosamente. Puede Iniciar Sesión.");
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                /*user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
                 user.setEnable(1);
-                user.setRoleId(2);*/
+                user.setAutorizacion("USER");
                 userRepository.save(user);
-                return "redirect:/juegos/vista";
+                return "redirect:/vista";
             } catch (DataIntegrityViolationException ex) {
                 bindingResult.rejectValue("username", "typeMismatch"); // pass an error message to the view
                 return "user/signUp";

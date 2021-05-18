@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/distribuidoras/editarFrm", "/distribuidoras/lista").hasAuthority("ADMIN")
                 .antMatchers("/juegos/editarFrm", "/juegos/lista").hasAnyAuthority("ADMIN","USER")
                 .anyRequest().permitAll();
+
     }
 
     @Autowired

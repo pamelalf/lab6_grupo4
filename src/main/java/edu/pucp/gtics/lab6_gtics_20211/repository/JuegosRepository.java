@@ -17,4 +17,10 @@ public interface JuegosRepository extends JpaRepository<Juegos,Integer> {
             "            inner join generos g on (g.idgenero = j.idgenero)\n" +
             "            where u.idusuario=?1 order by  j.nombre desc;",nativeQuery = true)
     List<JuegosUserDto> obtenerJuegosPorUser(int idusuario);
+
+    List<Juegos> findAllByOrderByNombreDesc();
+
+    @Query(value = "SELECT * FROM gameshop3.juegos j inner join plataformas p on (j.idplataforma = p.idplataforma) order by j.precio ASC;",
+            nativeQuery = true)
+    List<Juegos> findAllByOrdOrderByPrecioAsc();
 }

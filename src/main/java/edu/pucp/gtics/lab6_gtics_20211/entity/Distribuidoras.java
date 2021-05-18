@@ -23,7 +23,7 @@ public class Distribuidoras {
 
     @Min(value = 1880, message = "Debe ser mayor que o igual a 1880")
     @Max(value = 2100, message = "Debe ser menor que 2100")
-    private int fundacion = 1800;
+    private int fundacion = 1880;
 
     @ManyToOne
     @JoinColumn(name = "idsede")

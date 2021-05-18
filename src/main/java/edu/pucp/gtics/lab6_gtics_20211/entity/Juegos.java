@@ -14,7 +14,7 @@ public class Juegos {
     @Size(min = 3, max = 45, message = "Debe contener entre 3 y 45 caracteres")
     private String nombre;
 
-    @Size(min = 3, max = 200, message = "Debe contener entre 3 y 200 caracteres")
+    @Size(min = 3, max = 2000, message = "Debe contener entre 3 y 200 caracteres")
     private String descripcion;
 
     @NotNull(message = "Coloque un número")
